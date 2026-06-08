@@ -52,13 +52,13 @@ jobs:
       - name: Build release installer for ${{ matrix.device }}
         run: |
           ./build.sh --device ${{ matrix.device }} --installer-zip
-          mv uefi-installer-${{ matrix.device }}*.zip uefi-installer-${{ matrix.device }}-release.zip
+          mv uefi-installer-${{ matrix.device }}.zip uefi-installer-${{ matrix.device }}-release.zip
           rm -rf ./workspace
 
       - name: Build debug installer for ${{ matrix.device }}
         run: |
           ./build.sh --device ${{ matrix.device }} --installer-zip --release DEBUG
-          mv uefi-installer-${{ matrix.device }}*.zip uefi-installer-${{ matrix.device }}-debug.zip
+          mv uefi-installer-${{ matrix.device }}.zip uefi-installer-${{ matrix.device }}-debug.zip
           
 
       - name: Upload a Build Artifact
