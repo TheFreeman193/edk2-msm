@@ -69,13 +69,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install --install-recommends winehq-stable libsdl2-2.0-0 libsdl2-dev  build-essential uuid-dev clang llvm iasl nasm gcc-aarch64-linux-gnu abootimg python3-pil python3-git gettext libgcc-s1:i386 libstdc++6:i386  -y
 
-      - name: Build an image for ${{ matrix.device }}
+      - name: Build release image for ${{ matrix.device }}
         run: |
           ./build.sh --device ${{ matrix.device }}
-          for n in boot*.img; do echo "$n" "${n%.img}-release.img"; done
-          ./build.sh --clean
+          mv boot-${{ matrix.device }}*.img boot-${{ matrix.device }}-release.img
+          rm -rf ./workspace
+
+      - name: Build debug image for ${{ matrix.device }}
+        run: |
           ./build.sh --device ${{ matrix.device }} --release DEBUG
-          for n in boot*.img; do echo "$n" "${n%.img}-debug.img"; done
+          mv boot-${{ matrix.device }}*.img boot-${{ matrix.device }}-debug.img
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4

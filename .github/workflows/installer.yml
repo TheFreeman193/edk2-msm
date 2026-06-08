@@ -49,13 +49,16 @@ jobs:
           sudo apt-get update
           sudo apt install build-essential uuid-dev iasl git nasm python-is-python3 gettext gcc-aarch64-linux-gnu clang llvm device-tree-compiler
 
-      - name: Build device ${{ matrix.device }}
+      - name: Build release installer for ${{ matrix.device }}
         run: |
           ./build.sh --device ${{ matrix.device }} --installer-zip
-          for n in uefi-installer*.zip; do echo "$n" "${n%.zip}-release.zip"; done
-          ./build.sh --clean
+          mv uefi-installer-${{ matrix.device }}*.zip uefi-installer-${{ matrix.device }}-release.zip
+          rm -rf ./workspace
+
+      - name: Build debug installer for ${{ matrix.device }}
+        run: |
           ./build.sh --device ${{ matrix.device }} --installer-zip --release DEBUG
-          for n in uefi-installer*.zip; do echo "$n" "${n%.zip}-debug.zip"; done
+          mv uefi-installer-${{ matrix.device }}*.zip uefi-installer-${{ matrix.device }}-debug.zip
           
 
       - name: Upload a Build Artifact
