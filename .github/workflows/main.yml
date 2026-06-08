@@ -72,6 +72,10 @@ jobs:
       - name: Build an image for ${{ matrix.device }}
         run: |
           ./build.sh --device ${{ matrix.device }}
+          for n in boot*.img; do echo "$n" "${n%.img}-release.img"; done
+          ./build.sh --clean
+          ./build.sh --device ${{ matrix.device }} --release DEBUG
+          for n in boot*.img; do echo "$n" "${n%.img}-debug.img"; done
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
